@@ -149,6 +149,8 @@ Game.prototype = {
     },
     load: function(){
         var s = this.storage.game;
+        if (typeof s === 'undefined') return;
+
         s = s.replace(/(\r\n|\n|\r)/gm, '');
         var g = JSON.parse(s);
         if (g === null) return;
