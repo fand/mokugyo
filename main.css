@@ -48,6 +48,49 @@
     }
 }
 
+@-moz-keyframes fadeup {
+    0% {
+        margin-top: -25px;
+        opacity: 1.0;
+    }
+    100% {
+        margin-top: -350px;
+        opacity: 0;
+    }
+}
+@-moz-keyframes zoomout {
+    0% {
+        -moz-transform: scale(1.0, 1.0);
+        opacity: 1.0;
+    }
+    100% {
+        -moz-transform: scale(0.5, 0.5);
+        opacity: 0;
+    }
+}
+@-moz-keyframes halo {
+    0% {
+        -moz-transform: rotateZ(0deg);
+    }
+    100% {
+        -moz-transform: rotateZ(360deg);
+    }
+}
+@-moz-keyframes achievement {
+    0% {
+        bottom: 150px;
+        opacity: 1.0;
+    }
+    50% {
+        bottom: 225px;
+        opacity: 0;
+    }
+    100% {
+        bottom: 300px;
+        opacity: 0;
+    }
+}
+
 
 
 /* Layout */
@@ -73,7 +116,6 @@ body {
 }
 #center {
     left: 30%;
-    /* width: 45%; */
     border-left: 5px solid #999;
 }
 #right {
@@ -111,6 +153,7 @@ body {
     background: url(img/bonji.png);
     overflow: hidden;
     -webkit-animation: fadeup 2s ease 0s 1 forwards;
+    -moz-animation: fadeup 2s ease 0s 1 forwards;
     z-index: 3;
 }
 .plus {
@@ -118,6 +161,7 @@ body {
     width: 30px;
     height: 20px;
     -webkit-animation: zoomout 1s ease 0.3s 1 forwards;
+    -moz-animation: zoomout 1s ease 0.3s 1 forwards;
     z-index: 3;
 }
 
@@ -142,14 +186,14 @@ body {
 
 #halo {
     position: absolute;
-    width: 400px;
-    height: 400px;
+    width: 500px;
+    height: 500px;
     top: 50%;
     left: 50%;
-    margin-top: -200px;
-    margin-left: -200px;
-
+    margin-top: -250px;
+    margin-left: -250px;
     -webkit-animation: halo 20s linear 0s infinite forwards;
+    -moz-animation: halo 20s linear 0s infinite forwards;
     z-index: 1;
 }
 
@@ -162,6 +206,7 @@ body {
     text-align: center;
     font-size: 30px;
     -webkit-animation: achievement 3s ease 1.5s 1 forwards;
+    -moz-animation: achievement 3s ease 1.5s 1 forwards;
     z-index: 3;
 }
 

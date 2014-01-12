@@ -1,6 +1,10 @@
-window.ctx = new webkitAudioContext();
-// @STREAM_LENGTH = 1024
-// @SAMPLE_RATE = 48000
+if (typeof webkitAudioContext !== 'undefined') {
+    window.ctx = new webkitAudioContext();
+}
+else if (typeof AudioContext !== 'undefined') {
+    window.ctx = new AudioContext();
+}
+
 
 window.KYO = [
     '観自在菩薩', '行深般若波羅蜜多時', '照見五蘊皆空',
@@ -134,6 +138,7 @@ var GameView = function(model){
     this.okyo_sub1_mp3.loop = true;
     this.okyo_sub2_mp3.loop = true;
 
+//    this.count = $('#count');
     this.count_total = $('#count-total');
     this.count_kps   = $('#count-kps');
 
@@ -158,10 +163,10 @@ GameView.prototype = {
         $(window).on("load resize", function(){ self.resize(); });
     },
     resize: function(){
-        this.center.css(
-            'width',
-            this.body.width() - (this.left.width() + this.right.width()) - 10 + 'px'
-        );
+        this.center.css({
+            left: this.left.width(),
+            width: this.body.width() - (this.left.width() + this.right.width()) - 10 + 'px'
+        });
     },
     click: function(e){
         var pos = [e.clientX, e.clientY];
@@ -178,7 +183,7 @@ GameView.prototype = {
             'top': (pos[1] - 30) + 'px'
         });
         this.left.append(bonji).append(plus);
-        setTimeout(function(){bonji.remove(); plus.remove();}, 3000);
+        window.setTimeout(function(){bonji.remove(); plus.remove();}, 3000);
 
         this.mokugyo_mp3.play();
         this.model.click();
@@ -191,7 +196,7 @@ GameView.prototype = {
         var a = $('<div class="achievement"></div>');
         a.html('achievement :<br>' + msg);
         this.center.append(a);
-        setTimeout(function(){a.remove();}, 5000);
+        window.setTimeout(function(){a.remove();}, 5000);
 
         if (typeof okyo_num === 'undefined') {
             this.gong_mp3.play();
