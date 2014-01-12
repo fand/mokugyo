@@ -1,26 +1,73 @@
 <title>Mokugyo Clicker</title>
 
 <link href="main.css" rel="stylesheet" type="text/css"/>
+<link href="http://fonts.googleapis.com/css?family=Kavoon" rel="stylesheet" type="text/css">
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <script src="main.js"></script>
 
+<body onSelectStart="return false;" style="-moz-user-select: none; -khtml-user-select: none; user-select: none;">
 
-<div id="left" onSelectStart="return false;" style="-moz-user-select: none; -khtml-user-select: none; user-select: none;">
-  <div id="left-count"></div>
+<div id="left">
   <img id="mokugyo" src="img/mokugyo.png" />
+  <img id="halo" src="img/halo.png" />
+  <div id="count">
+    <div id="count-total"></div>
+    <div id="count-kps"></div>
+  </div>
+
 </div>
 
 <div id="center">
   <div id="kakejiku"></div>
   <div id="assets-image"></div>
+  <div id="achievement"></div>
 </div>
 
 
 <div id="right">
+  <div id="ofuse-label">Ofusee</div>
 
+  <div id="ofuse-list"></div>
+
+  <div id="asset-list">
+
+    <div class="asset">
+      <div class="asset-name">Cursor</div>
+      <div class="asset-kudoku">15</div>
+    </div>
+
+    <div class="asset">
+      <div class="asset-name">Jakucho</div>
+      <div class="asset-kudoku">100</div>
+    </div>
+
+    <div class="asset">
+      <div class="asset-name">Stone prayer wheel</div>
+      <div class="asset-kudoku">500</div>
+    </div>
+
+    <div class="asset">
+      <div class="asset-name">Buddha machine</div>
+      <div class="asset-kudoku">1000</div>
+    </div>
+
+    <div class="asset">
+      <div class="asset-name">Jet wheel</div>
+      <div class="asset-kudoku">3000</div>
+    </div>
+
+    <div class="asset">
+      <div class="asset-name">Electric wheel</div>
+      <div class="asset-kudoku">5000</div>
+    </div>
+
+    <div class="asset">
+      <div class="asset-name">Nuclear wheel</div>
+      <div class="asset-kudoku">10000</div>
+    </div>
+
+  </div>
 </div>
 
-
-<div style="display: none;">
-  <audio id="mokugyo_mp3" src="sound/mokugyo.mp3" preload></audio>
-</div>
+</body>
