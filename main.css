@@ -5,6 +5,7 @@
     color: #fff;
     text-shadow: 0px 0px 10px #000;
 }
+
 @-webkit-keyframes fadeup {
     0% {
         margin-top: -25px;
@@ -91,6 +92,49 @@
     }
 }
 
+@-ms-keyframes fadeup {
+    0% {
+        margin-top: -25px;
+        opacity: 1.0;
+    }
+    100% {
+        margin-top: -350px;
+        opacity: 0;
+    }
+}
+@-ms-keyframes zoomout {
+    0% {
+        -ms-transform: scale(1.0, 1.0);
+        opacity: 1.0;
+    }
+    100% {
+        -ms-transform: scale(0.5, 0.5);
+        opacity: 0;
+    }
+}
+@-ms-keyframes halo {
+    0% {
+        -ms-transform: rotateZ(0deg);
+    }
+    100% {
+        -ms-transform: rotateZ(360deg);
+    }
+}
+@-ms-keyframes achievement {
+    0% {
+        bottom: 150px;
+        opacity: 1.0;
+    }
+    50% {
+        bottom: 225px;
+        opacity: 0;
+    }
+    100% {
+        bottom: 300px;
+        opacity: 0;
+    }
+}
+
 
 
 /* Layout */
@@ -154,6 +198,7 @@ body {
     overflow: hidden;
     -webkit-animation: fadeup 2s ease 0s 1 forwards;
     -moz-animation: fadeup 2s ease 0s 1 forwards;
+    -ms-animation: fadeup 2s ease 0s 1 forwards;
     z-index: 3;
 }
 .plus {
@@ -162,6 +207,7 @@ body {
     height: 20px;
     -webkit-animation: zoomout 1s ease 0.3s 1 forwards;
     -moz-animation: zoomout 1s ease 0.3s 1 forwards;
+    -ms-animation: zoomout 1s ease 0.3s 1 forwards;
     z-index: 3;
 }
 
@@ -194,6 +240,7 @@ body {
     margin-left: -250px;
     -webkit-animation: halo 20s linear 0s infinite forwards;
     -moz-animation: halo 20s linear 0s infinite forwards;
+    -ms-animation: halo 20s linear 0s infinite forwards;
     z-index: 1;
 }
 
@@ -207,6 +254,7 @@ body {
     font-size: 30px;
     -webkit-animation: achievement 3s ease 1.5s 1 forwards;
     -moz-animation: achievement 3s ease 1.5s 1 forwards;
+    -ms-animation: achievement 3s ease 1.5s 1 forwards;
     z-index: 3;
 }
 
