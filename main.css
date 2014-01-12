@@ -325,3 +325,22 @@ body {
     overflow: hidden;
     z-index: 3;
 }
+
+
+#save, #reset {
+    position: absolute;
+    right: 0px;
+    width: 80px;
+    height: 36px;
+    font-size: 24px;
+    line-height: 32px;
+    text-align: center;
+    background: #000;
+    z-index: 3;
+}
+#save {
+    top: 0px;
+}
+#reset {
+    top: 40px;
+}
