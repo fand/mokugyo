@@ -232,6 +232,7 @@ GameView.prototype = {
     evaluate: function(count){
         var self = this;
         this.asset.each(function(i){
+            $(this).children().filter(".asset-kudoku").html(window.ASSET_PRICE[i]); // Auto Setup
             if (count >= window.ASSET_PRICE[i]) {
                 if ($(this).hasClass('available')) return;
                 $(this).addClass('available').on('click', function(){
