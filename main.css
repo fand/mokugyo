@@ -220,7 +220,7 @@ body {
     position: absolute;
     width: 70px;
     height: 100px;
-    background: url(img/jakucho_face.png);
+    background: url(./img/jakucho_face.png);
     background-size: contain;
     overflow: hidden;
     z-index: 3;
