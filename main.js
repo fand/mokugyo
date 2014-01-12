@@ -5,7 +5,6 @@ else if (typeof AudioContext !== 'undefined') {
     window.ctx = new AudioContext();
 }
 
-
 window.KYO = [
     '観自在菩薩', '行深般若波羅蜜多時', '照見五蘊皆空',
     '度一切苦厄', '舎利子', '色不異空', '空不異色', '色即是空',
