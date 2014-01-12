@@ -72,6 +72,7 @@ var ASSET_PRICE = [15, 100, 300, 1000, 4000, 10000, 100000];
 
 
 var Game = function(){
+    this.time = 0;
     this.count = 0;
     this.kps = 0;  // kudoku per second
     this.kpc = 1;  // kudoku per click
@@ -79,10 +80,13 @@ var Game = function(){
 
     this.assets = [0,0,0,0,0,0,0];
 
+    this.storage = window.localStorage;
+
     this.view = new GameView(this);
 };
 Game.prototype = {
     start: function(){
+        this.load();
         this.view.updateCount(this.count, this.kps);
         var self = this;
         setInterval(function(){
@@ -93,6 +97,13 @@ Game.prototype = {
         this.count += this.kps;
         this.evaluate();
         this.view.updateCount(this.count, this.kps);
+
+        console.log(window.KYO[this.time % window.KYO.length]);
+
+        this.time++;
+        if (this.time % 60 == 0) {
+            this.save();
+        }
     },
     evaluate: function(){
         var achievement = this.evaluator.eval(this.count);
@@ -122,6 +133,38 @@ Game.prototype = {
                 this.view.playOkyo(i);
             }
         }
+        else {
+            this.view.playOkyoSub();
+        }
+    },
+    save: function(){
+        var g = {
+            count: this.count,
+            kps: this.kps,
+            kpc: this.kpc,
+            assets:this.assets
+        };
+        this.storage.game = JSON.stringify(g);
+        this.view.showMessage('Game saved');
+    },
+    load: function(){
+        var s = this.storage.game;
+        s = s.replace(/(\r\n|\n|\r)/gm, '');
+        var g = JSON.parse(s);
+        if (g === null) return;
+        this.count = g.count;
+        this.kps = g.kps;
+        this.kpc = g.kpc;
+        this.assets = g.assets;
+
+        this.view.load(this.assets);
+    },
+    reset: function(){
+        this.count = 0;
+        this.kps = 0;
+        this.kpc = 1;
+        this.assets = [0,0,0,0,0,0,0];
+        this.storage.clear('game');
     }
 };
 
@@ -137,7 +180,6 @@ var GameView = function(model){
     this.okyo_sub1_mp3.loop = true;
     this.okyo_sub2_mp3.loop = true;
 
-//    this.count = $('#count');
     this.count_total = $('#count-total');
     this.count_kps   = $('#count-kps');
 
@@ -145,10 +187,10 @@ var GameView = function(model){
     this.left = $('#left');
     this.center = $('#center');
     this.right = $('#right');
-
     this.achievement = $('#achievement');
-
     this.asset = $('.asset');
+    this.btn_save = $('#save');
+    this.btn_reset = $('#reset');
 
     this.bonji_num = 0;
 
@@ -160,6 +202,9 @@ GameView.prototype = {
         this.mokugyo.on('click', function(e){self.click(e);});
 
         $(window).on("load resize", function(){ self.resize(); });
+
+        this.btn_save.on('click', function(){self.save();});
+        this.btn_reset.on('click', function(){self.reset();});
     },
     resize: function(){
         this.center.css({
@@ -191,6 +236,11 @@ GameView.prototype = {
         this.count_total.text(Math.floor(count) + ' kudoku');
         this.count_kps.text('per second: ' + kps);
     },
+    showMessage: function(msg){
+        var a = $('<div class="achievement">' + msg + '</div>');
+        this.center.append(a);
+        window.setTimeout(function(){a.remove();}, 5000);
+    },
     showAchievement: function(msg, okyo_num){
         var a = $('<div class="achievement"></div>');
         a.html('Achievement :<br>' + msg);
@@ -200,20 +250,8 @@ GameView.prototype = {
         if (typeof okyo_num === 'undefined') {
             this.gong_mp3.play();
         }
-        else {
-            if (okyo_num == 1) {
-                this.okyo_mp3.play();
-            }
-            else {
-                if (Math.random() < 0.5) {
-                    console.log('sub1');
-                    this.okyo_sub1.play();
-                }
-                else {
-                    console.log('sub2');
-                    this.okyo_sub2.play();
-                }
-            }
+        else if (okyo_num == 1) {
+            this.okyo_mp3.play();
         }
 
     },
@@ -246,6 +284,36 @@ GameView.prototype = {
     playOkyo: function(i){
         this.okyo_mp3.stop();
         this.okyo_mp3.play(ASSET_KPS[i]);
+    },
+    playOkyoSub: function(){
+        var r = Math.random();
+        if (r < 0.45) {
+            this.okyo_sub1_mp3.play();
+        }
+        else if (r < 0.93) {
+            this.okyo_sub2_mp3.play();
+        }
+        else {
+            this.okyo_mp3.play();
+        }
+    },
+    load: function(assets){
+        if (assets === undefined) return;
+        for (var i = 0; i < assets[1]; i++) {
+            var face = $('<div class="jakucho-face"></div>');
+            face.css({
+                top: Math.random() * (this.center.width() - 200) + 100 + 'px',
+                left: Math.random() * (this.center.height() - 220) + 100 + 'px'
+            });
+            this.center.append(face);
+        }
+    },
+    reset: function(){
+        this.model.reset();
+        $('.jakucho-face').remove();
+    },
+    save: function(){
+        this.model.save();
     }
 };
 
