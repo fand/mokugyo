@@ -193,7 +193,7 @@ GameView.prototype = {
     },
     showAchievement: function(msg, okyo_num){
         var a = $('<div class="achievement"></div>');
-        a.html('achievement :<br>' + msg);
+        a.html('Achievement :<br>' + msg);
         this.center.append(a);
         window.setTimeout(function(){a.remove();}, 5000);
 
@@ -251,8 +251,8 @@ GameView.prototype = {
 
 var Evaluator = function(){
     this.pos = 0;
-    this.counts = [10, 108];
-    this.achievements = ['Ten Bonnoh', 'Bonnoh Master'];
+    this.counts = [10, 108, 110359, 1000000000, 5670000000];
+    this.achievements = ['Ten Bonnoh', 'Bonnoh Master', 'Human Sacrifice', 'Trisahasramahasahasralokadhatu', 'Salvation of Maitreya'];
 };
 Evaluator.prototype = {
     eval: function(count){
