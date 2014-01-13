@@ -4,6 +4,7 @@
     font-family: 'Kavoon', cursive;
     color: #fff;
     text-shadow: 0px 0px 10px #000;
+    cursor: default;
 }
 
 @-webkit-keyframes fadeup {
@@ -181,13 +182,14 @@ body {
     margin-top: -100px;
     margin-left: -100px;
     z-index: 2;
+    border-radius: 100px;
+    box-shadow: 0px 0px 10px #fff, 0px 0px 20px #fff, 0px 0px 30px #fff;
 }
 #mokugyo:hover {
-    -webkit-filter: drop-shadow(0px 0px 20px #fff);
-    -webkit-filter: drop-shadow(0px 0px 10px #fff);
+    box-shadow: 0px 0px 10px #fff, 0px 0px 20px #fff, 0px 0px 30px #fff, 0px 0px 40px #fff, 0px 0px 50px #fff, 0px 0px 60px #fff;
 }
 #mokugyo:active {
-    opacity: 0.95;
+    box-shadow: 0px 0px 10px #fff, 0px 0px 20px #fff, 0px 0px 30px #fff, 0px 0px 40px #fff;
 }
 
 .bonji {
@@ -280,6 +282,7 @@ body {
     margin-bottom: 3px;
     background: #000;
     opacity: 0.3;
+    cursor: default;
 }
 .asset-image {
     position: absolute;
@@ -306,13 +309,14 @@ body {
 }
 
 .asset.available {
+    cursor: pointer;
     opacity: 1.0;
 }
 .asset.available:hover {
-    opacity: 0.96;
+    background: #222;
 }
 .asset.available:active {
-    opacity: 1.0;
+    background: #000;
 }
 
 
@@ -337,6 +341,10 @@ body {
     text-align: center;
     background: #000;
     z-index: 3;
+    cursor: pointer;
+}
+#save:hover, #reset:hover {
+    background: #444;
 }
 #save {
     top: 0px;
