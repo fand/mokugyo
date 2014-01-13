@@ -161,6 +161,7 @@ body {
 }
 #center {
     left: 30%;
+    width: 50%;
     border-left: 5px solid #999;
 }
 #right {
@@ -246,7 +247,7 @@ body {
     z-index: 1;
 }
 
-.achievement {
+.message {
     position: absolute;
     left: 0px;
     bottom: 150px;
@@ -351,4 +352,10 @@ body {
 }
 #reset {
     top: 40px;
+}
+
+#youtube {
+    position: absolute;
+    top: 0px;
+    left: 0px;
 }

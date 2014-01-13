@@ -136,6 +136,7 @@ Game.prototype = {
         else {
             this.view.playOkyoSub();
         }
+        return this.assets[i];
     },
     save: function(){
         var g = {
@@ -157,9 +158,14 @@ Game.prototype = {
         this.count = g.count;
         this.kps = g.kps;
         this.kpc = g.kpc;
-        this.assets = g.assets;
 
         this.view.load(this.assets);
+
+        for (var i = 0; i < g.assets.length; i++) {
+            for (var j = 0; j < g.assets[i]; j++) {
+                this.view.addAsset(i);
+            }
+        }
     },
     reset: function(){
         this.count = 0;
@@ -239,16 +245,12 @@ GameView.prototype = {
         this.count_kps.text('per second: ' + kps);
     },
     showMessage: function(msg){
-        var a = $('<div class="achievement">' + msg + '</div>');
+        var a = $('<div class="message">' + msg + '</div>');
         this.center.append(a);
         window.setTimeout(function(){a.remove();}, 5000);
     },
     showAchievement: function(msg, okyo_num){
-        var a = $('<div class="achievement"></div>');
-        a.html('Achievement :<br>' + msg);
-        this.center.append(a);
-        window.setTimeout(function(){a.remove();}, 5000);
-
+        this.showMessage('Achievement :<br>' + msg);
         if (typeof okyo_num === 'undefined') {
             this.gong_mp3.play();
         }
@@ -258,7 +260,7 @@ GameView.prototype = {
 
     },
     addAsset: function(i){
-        this.model.addAsset(i);
+        var num = this.model.addAsset(i);
         if (i == 1) {
             var face = $('<div class="jakucho-face"></div>');
             face.css({
@@ -266,6 +268,15 @@ GameView.prototype = {
                 left: Math.random() * (this.center.height() - 120) + 'px'
             });
             this.center.append(face);
+
+            if (num == 58) {
+                this.showAchievement('Goji Hakkyo');
+                var youtube = $('<iframe id="youtube" width="130" height="100" src="//www.youtube.com/embed/videoseries?list=PLF3r3_0zc-GKSURk5LjEfd3y4fw2NTHYz&autoplay=1" frameborder="0" allowfullscreen></iframe>');
+                this.center.append(youtube);
+            }
+        }
+        else if (i == 3) {
+            return;
         }
     },
     evaluate: function(count){
@@ -300,15 +311,7 @@ GameView.prototype = {
         }
     },
     load: function(assets){
-        if (assets === undefined) return;
-        for (var i = 0; i < assets[1]; i++) {
-            var face = $('<div class="jakucho-face"></div>');
-            face.css({
-                top: Math.random() * (this.center.width() - 200) + 100 + 'px',
-                left: Math.random() * (this.center.height() - 220) + 100 + 'px'
-            });
-            this.center.append(face);
-        }
+        // if (assets === undefined) return;
     },
     reset: function(){
         this.model.reset();
@@ -321,8 +324,8 @@ GameView.prototype = {
 
 var Evaluator = function(){
     this.pos = 0;
-    this.counts = [10, 108, 110359, 1000000000, 5670000000];
-    this.achievements = ['Ten Bonnoh', 'Bonnoh Master', 'Human Sacrifice', 'Trisahasramahasahasralokadhatu', 'Salvation of Maitreya'];
+    this.counts = [10, 108, 110359, 1000000000, 5670000000, 1000000000000000000000000];
+    this.achievements = ['Ten Bonnoh', 'Bonnoh Master', 'Human Sacrifice', 'Trisahasramahasahasralokadhatu', 'Salvation of Maitreya', 'Nirvana'];
 };
 Evaluator.prototype = {
     eval: function(count){
