@@ -54,12 +54,16 @@ MP3.prototype = {
         if (typeof rate !== 'undefined') { source.playbackRate = rate; }
         source.start(0);
         this.sources.push(source);
+        if (this.sources.length > 10) {
+            this.sources.shift().stop();
+        }
     },
     stop: function(){
         for (var i=0; i < this.sources.length; i++) {
             this.sources[i].stop(0);
         }
-        this.sources = [];
+        //this.sources = [];
+        this.sources.splice(3);
     }
 
 };
@@ -125,16 +129,25 @@ Game.prototype = {
 
         this.evaluate();
 
-        if (this.assets[i] == 1) {
-            if (i == 1) {
+        if (i == 1) {
+            if (this.assets[i] == 1) {
                 this.view.showAchievement('Okyo Debut', i, this.assets[i]);
             }
-            else if (i > 2) {
+            else {
                 this.view.playOkyo(i);
             }
         }
-        else {
-            this.view.playOkyoSub();
+        else if (i == 3) {
+            this.view.playBuddha();
+        }
+        else if (i > 3) {
+            if (this.assets[i] == 1) {
+                this.view.playOkyo(i);
+
+            }
+            else {
+                this.view.playOkyoSub();
+            }
         }
         return this.assets[i];
     },
@@ -184,9 +197,13 @@ var GameView = function(model){
     this.okyo_mp3 = new MP3('./sound/okyo.mp3');
     this.okyo_sub1_mp3 = new MP3('./sound/okyo_sub1.mp3');
     this.okyo_sub2_mp3 = new MP3('./sound/okyo_sub2.mp3');
+    this.bm1_mp3 = new MP3('./sound/BM101.mp3');
+    this.bm2_mp3 = new MP3('./sound/BM202.mp3');
     this.okyo_mp3.loop = true;
     this.okyo_sub1_mp3.loop = true;
     this.okyo_sub2_mp3.loop = true;
+    this.bm1_mp3.loop = true;
+    this.bm2_mp3.loop = true;
 
     this.count_total = $('#count-total');
     this.count_kps   = $('#count-kps');
@@ -276,7 +293,12 @@ GameView.prototype = {
             }
         }
         else if (i == 3) {
-            return;
+            var buddha = $('<div class="buddha-machine"></div>');
+            buddha.css({
+                bottom: '0px',
+                left: Math.random() * (this.center.height() - 120) + 'px'
+            });
+            this.center.append(buddha);
         }
     },
     evaluate: function(count){
@@ -308,6 +330,15 @@ GameView.prototype = {
         }
         else {
             this.okyo_mp3.play();
+        }
+    },
+    playBuddha: function(i){
+        var r = Math.random();
+        if (r < 0.7) {
+            this.bm1_mp3.play();
+        }
+        else {
+            this.bm2_mp3.play();
         }
     },
     load: function(assets){

@@ -278,8 +278,9 @@ body {
 .asset {
     position: relative;
     width: 100%;
-    height: 48px;
-    padding: 5px;
+    height: 64px;
+    padding: 0px;
+    padding-top: 6px;
     margin-bottom: 3px;
     background: #000;
     opacity: 0.3;
@@ -287,23 +288,23 @@ body {
 }
 .asset-image {
     position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 48px
-    height: 48px;
+    top: 6px;
+    left: 6px;
+    width: 64px;
+    height: 64px;
 }
 .asset-name {
     position: absolute;
-    top: 0px;
-    left: 60px;
+    top: 6px;
+    left: 80px;
     width: 100%;
     height: 80px;
     font-size: 24px;
 }
 .asset-kudoku {
     position: absolute;
-    top: 30px;
-    left: 60px;
+    top: 36px;
+    left: 80px;
     width: 100%;
     height: 80px;
     font-size: 16px;
@@ -326,6 +327,15 @@ body {
     width: 70px;
     height: 100px;
     background: url(./img/jakucho_face.png);
+    background-size: contain;
+    overflow: hidden;
+    z-index: 3;
+}
+.buddha-machine {
+    position: absolute;
+    width: 96px;
+    height: 96px;
+    background: url(./img/buddha.gif);
     background-size: contain;
     overflow: hidden;
     z-index: 3;
