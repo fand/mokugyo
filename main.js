@@ -1,8 +1,12 @@
 if (typeof webkitAudioContext !== 'undefined') {
     window.ctx = new webkitAudioContext();
+    window.dst = window.ctx.createDynamicsCompressor();
+    window.dst.connect(window.ctx.destination);
 }
 else if (typeof AudioContext !== 'undefined') {
     window.ctx = new AudioContext();
+    window.dst = window.ctx.createDynamicsCompressor();
+    window.dst.connect(window.ctx.destination);
 }
 
 window.KYO = [
@@ -50,20 +54,20 @@ MP3.prototype = {
         if (typeof this.buffer === 'undefined') return;
         var source = window.ctx.createBufferSource();
         source.buffer = this.buffer;
-        source.connect(window.ctx.destination);
+        source.connect(window.dst);
         if (typeof rate !== 'undefined') { source.playbackRate = rate; }
         source.start(0);
         this.sources.push(source);
-        if (this.sources.length > 10) {
-            this.sources.shift().stop();
+        if (this.sources.length > 20) {
+            var s = this.sources.shift();
+            s.stop();
         }
     },
     stop: function(){
-        for (var i=0; i < this.sources.length; i++) {
+        for (var i=10; i < this.sources.length; i++) {
             this.sources[i].stop(0);
         }
-        //this.sources = [];
-        this.sources.splice(3);
+        this.sources.splice(10);
     }
 
 };
