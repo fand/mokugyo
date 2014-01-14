@@ -351,6 +351,7 @@ GameView.prototype = {
     reset: function(){
         this.model.reset();
         $('.jakucho-face').remove();
+        $('.buddha-machine').remove();
     },
     save: function(){
         this.model.save();
