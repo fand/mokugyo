@@ -1,12 +1,18 @@
 if (typeof webkitAudioContext !== 'undefined') {
     window.ctx = new webkitAudioContext();
     window.dst = window.ctx.createDynamicsCompressor();
-    window.dst.connect(window.ctx.destination);
+    window.gain = window.ctx.createGain();
+    window.gain.gain.value = 1.0;
+    window.dst.connect(window.gain);
+    window.gain.connect(window.ctx.destination);
 }
 else if (typeof AudioContext !== 'undefined') {
     window.ctx = new AudioContext();
     window.dst = window.ctx.createDynamicsCompressor();
-    window.dst.connect(window.ctx.destination);
+    window.gain = window.ctx.createGain();
+    window.gain.gain.value = 1.0;
+    window.dst.connect(window.gain);
+    window.gain.connect(window.ctx.destination);
 }
 
 window.KYO = [
@@ -75,7 +81,7 @@ MP3.prototype = {
 
 var ASSET_KPS = [0.5, 1, 3, 10, 100, 1000, 10000];
 var ASSET_PRICE = [15, 100, 300, 1000, 4000, 10000, 100000];
-//var ASSET_PRICE = [1, 2,3,4,5,6,7,8,9];
+//var ASSET_PRICE = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 
 
@@ -87,6 +93,7 @@ var Game = function(){
     this.evaluator = new Evaluator();
 
     this.assets = [0,0,0,0,0,0,0];
+    this.ofuse = {};
 
     this.storage = window.localStorage;
 
@@ -118,12 +125,23 @@ Game.prototype = {
         if (typeof achievement !== 'undefined') {
             this.view.showAchievement(achievement);
         }
+        var ofuse = this.evaluator.evalOfuse(this.count, this.assets);
+        if (typeof ofuse !== 'undefined') {
+            this.view.showOfuse(ofuse);
+        }
+
         this.view.evaluate(this.count);
     },
     click: function(){
         this.count += this.kpc;
         this.view.updateCount(this.count, this.kps);
         this.evaluate();
+    },
+    showOfuse: function(name){
+        this.ofuse[name] = 0;
+    },
+    addOfuse: function(name){
+        this.ofuse[name] = 1;
     },
     addAsset: function(i){
         this.assets[i] += 1;
@@ -160,7 +178,8 @@ Game.prototype = {
             count: this.count,
             kps: this.kps,
             kpc: this.kpc,
-            assets:this.assets
+            assets:this.assets,
+            ofuse: this.ofuse
         };
         this.storage.game = JSON.stringify(g);
         this.view.showMessage('Game saved');
@@ -183,12 +202,21 @@ Game.prototype = {
                 this.view.addAsset(i);
             }
         }
+        for (var o in g.ofuse) {
+            if (g.ofuse[o] === 0) {
+                this.view.showOfuse(o);
+            }
+            else {
+                this.view.addOfuse(o);
+            }
+        }
     },
     reset: function(){
         this.count = 0;
         this.kps = 0;
         this.kpc = 1;
         this.assets = [0,0,0,0,0,0,0];
+        this.ofuse = {};
         this.storage.clear('game');
     }
 };
@@ -209,6 +237,46 @@ var GameView = function(model){
     this.bm1_mp3.loop = true;
     this.bm2_mp3.loop = true;
 
+    this.ofuse_img = {
+        'Mute': './img/mute.bmp'
+    };
+
+    var self = this;
+    this.ofuse = {
+        'Mute': function(){
+            var T = new MutekiTimer();
+            var is_listening = false;
+            self.btn_mute.show();
+            self.btn_mute.on('click', function(){
+                if (window.gain.gain.value == 1.0) {
+                    window.gain.gain.value = 0;
+                    is_listening = false;
+
+                    $('.jakucho-face').each(function(i){
+                        var f = $(this);
+                        setTimeout(function(){f.addClass('wiggle');}, 10*i);
+                    });
+
+                    var listenToMe = function(){
+                        if (is_listening) {return;}
+                        self.showMessage('listen to me!!');
+                        T.setTimeout(function(){listenToMe();}, 4000);
+                    };
+                    T.setTimeout(function(){listenToMe();}, 4000);
+
+                    $(this).css('opacity', '0.6');
+                }
+                else {
+                    window.gain.gain.value = 1.0;
+                    is_listening = true;
+                    $('.jakucho-face').removeClass('wiggle');
+                    T.clearTimeout();
+                    $(this).css('opacity', '1.0');
+                }
+            });
+        }
+    };
+
     this.count_total = $('#count-total');
     this.count_kps   = $('#count-kps');
 
@@ -220,6 +288,9 @@ var GameView = function(model){
     this.asset = $('.asset');
     this.btn_save = $('#save');
     this.btn_reset = $('#reset');
+    this.btn_mute = $('#mute');
+
+    this.ofuse_list = $('#ofuse-list');
 
     this.bonji_num = 0;
 
@@ -280,6 +351,22 @@ GameView.prototype = {
         }
 
     },
+    showOfuse: function(name){
+        this.model.showOfuse(name);
+        var e = $('<img class="ofuse" name="' + name + '"src="' + this.ofuse_img[name] + '" />');
+        this.ofuse_list.append(e);
+        var self = this;
+        e.on('click', function(){
+            self.addOfuse($(this).attr('name'));
+            $(this).remove();
+        });
+    },
+    addOfuse: function(name){
+        this.model.addOfuse(name);
+        this.ofuse[name]();
+
+        $('.ofuse[name=' + name + ']').remove();
+    },
     addAsset: function(i){
         var num = this.model.addAsset(i);
         if (i == 1) {
@@ -292,7 +379,7 @@ GameView.prototype = {
 
             if (num == 58) {
                 this.showAchievement('Goji Hakkyo');
-                var youtube = $('<iframe id="youtube" width="130" height="100" src="//www.youtube.com/embed/videoseries?list=PLF3r3_0zc-GKSURk5LjEfd3y4fw2NTHYz&autoplay=1" frameborder="0" allowfullscreen></iframe>');
+                var youtube = $('<iframe id="youtube" width="200" height="120" src="//www.youtube.com/embed/videoseries?list=PLF3r3_0zc-GKSURk5LjEfd3y4fw2NTHYz&autoplay=1" frameborder="0" allowfullscreen></iframe>');
                 this.center.append(youtube);
             }
         }
@@ -352,6 +439,9 @@ GameView.prototype = {
         this.model.reset();
         $('.jakucho-face').remove();
         $('.buddha-machine').remove();
+        $('#youtube').remove();
+        this.btn_mute.hide();
+        // TODO: stop MP3
     },
     save: function(){
         this.model.save();
@@ -362,6 +452,14 @@ var Evaluator = function(){
     this.pos = 0;
     this.counts = [10, 108, 110359, 1000000000, 5670000000, 1000000000000000000000000];
     this.achievements = ['Ten Bonnoh', 'Bonnoh Master', 'Human Sacrifice', 'Trisahasramahasahasralokadhatu', 'Salvation of Maitreya', 'Nirvana'];
+
+    this.pos_ofuse = 0;
+    this.ofuse_flag = [
+        function(count, assets){return (assets[1] > 0) && (count > 10000);},
+        function(){return false;}
+    ];
+    this.ofuse = ['Mute'];
+
 };
 Evaluator.prototype = {
     eval: function(count){
@@ -371,6 +469,13 @@ Evaluator.prototype = {
         else {
             return undefined;
         }
+    },
+    evalOfuse: function(count, assets){
+        var cond = this.ofuse_flag[this.pos_ofuse](count, assets);
+        if (cond) {
+            return this.ofuse[this.pos_ofuse++];
+        }
+        return undefined;
     }
 };
 
