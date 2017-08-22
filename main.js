@@ -244,7 +244,6 @@ var GameView = function(model){
     var self = this;
     this.ofuse = {
         'Mute': function(){
-            var T = new MutekiTimer();
             var is_listening = false;
             self.btn_mute.show();
             self.btn_mute.on('click', function(){
@@ -260,9 +259,9 @@ var GameView = function(model){
                     var listenToMe = function(){
                         if (is_listening) {return;}
                         self.showMessage('listen to me!!');
-                        T.setTimeout(function(){listenToMe();}, 4000);
+                        setTimeout(function(){listenToMe();}, 4000);
                     };
-                    T.setTimeout(function(){listenToMe();}, 4000);
+                    setTimeout(function(){listenToMe();}, 4000);
 
                     $(this).css('opacity', '0.6');
                 }
@@ -270,7 +269,7 @@ var GameView = function(model){
                     window.gain.gain.value = 1.0;
                     is_listening = true;
                     $('.jakucho-face').removeClass('wiggle');
-                    T.clearTimeout();
+                    clearTimeout();
                     $(this).css('opacity', '1.0');
                 }
             });
